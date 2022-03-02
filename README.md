@@ -21,11 +21,15 @@ After checking and updating providers, it is ready to run the following commands
 firstly `terraform init` and then `terraform apply`
 
 ### Jenkins Configuration
+Basicly, firstly the required plugins will be installed, secondly the required users will be created on Jenkins and then create a new MultiBranch Pipeline in order to build docker container by using Jenkinsfile. 
 
-
-
+ * `github integration, docker, docker pipeline` need to be installed on jenkins -> manage plugins
+ * `Docker Hub and Github users` need to be created on jenkins -> credentials -> system -> global credentials
+ * In order to provide **webhook integration**, a token which was created on Github is required to create on jenkins -> credentials -> system -> global credentials
+ * In order to open connection for Webhook, github server is required to create on `manage jenkins -> configuration -> add git hub servers`
+ 
 ## [EKS Installation](eks-installation)
-3 worker nodes in 3 AZs have been installed by using the Terraform configuration. Generally, [this document](https://learn.hashicorp.com/tutorials/terraform/eks#optional-configure-terraform-kubernetes-provider) is used for the EKS installation. There are small updates in this configuration.
+3 worker nodes in different AZs have been installed by using the Terraform configuration. Generally, [this document](https://learn.hashicorp.com/tutorials/terraform/eks#optional-configure-terraform-kubernetes-provider) is used for the EKS installation. There are small updates in this configuration.
  * providers.tf: AWS connection and modules details
  * vpc.tf: provisions a VPC, subnets and availability zones using the AWS VPC module.
  * security-groups.tf: provisions the security groups used by the EKS cluster.
