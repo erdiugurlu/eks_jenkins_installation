@@ -57,21 +57,21 @@ kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v2
 
 To interact with the API Server we need to deploy the CLI:
 
-`sudo curl --silent --location -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/download/v2.0.4/argocd-linux-amd64
+`sudo curl --silent --location -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/download/v2.0.4/argocd-linux-amd64`
 
-sudo chmod +x /usr/local/bin/argocd`
+`sudo chmod +x /usr/local/bin/argocd`
 
 ### Expose argocd-server
 
 A Load Balancer will be used to make it usable ArgoCD:
-`kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
+`kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'`
 
-export ARGOCD_SERVER=`kubectl get svc argocd-server -n argocd -o json | jq --raw-output '.status.loadBalancer.ingress[0].hostname'`
-`
+``export ARGOCD_SERVER=`kubectl get svc argocd-server -n argocd -o json | jq --raw-output '.status.loadBalancer.ingress[0].hostname'` ``
+
 ### Login and User Details for Web-UI
 
 User details is taken and login with argocd cli if it needs. I wanted to use ArgoCD WebUI.
 
-`export ARGO_PWD=`kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d`
-argocd login $ARGOCD_SERVER --username admin --password $ARGO_PWD --insecure`
+``export ARGO_PWD=`kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d` ``
+`argocd login $ARGOCD_SERVER --username admin --password $ARGO_PWD --insecure`
 
