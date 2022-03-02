@@ -8,7 +8,7 @@ The infrastructure installation contains three components.
  * EKS on AWS
  * ArgoCD for deployment of services
 
- ![ci-cd-pipeline](1.png)
+ ![ci-cd-pipeline](ss_sdlc.png)
 
 ## [Jenkins Installation](jenkins-installation)
 In the relevant folder you can find all details, in order to install Jenkins on an EC2 server. 
