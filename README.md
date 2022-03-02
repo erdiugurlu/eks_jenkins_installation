@@ -42,3 +42,36 @@ In order to install an EKS cluster on AWS by using this configuration, firstly r
 Finally, the kubeconfig can be configured to connect to the new cluster by running the following command. Since I do not need a Kubernetes dashboard to complete this task, I do not prefer to install Kubernetes dashboard. 
 
 `aws eks --region $(terraform output -raw region) update-kubeconfig --name $(terraform output -raw cluster_name)`
+
+## ArgoCD Installation
+ArgoCD is used for CD of Kubernetes Deployments. Platform manifest details can be deployed on the EKS cluster by using ArgoCD.
+
+### Install Argo CD
+
+All those components could be installed using a manifest provided by the Argo Project:
+
+`kubectl create namespace argocd
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/v2.0.4/manifests/install.yaml`
+
+### Install Argo CD CLI
+
+To interact with the API Server we need to deploy the CLI:
+
+`sudo curl --silent --location -o /usr/local/bin/argocd https://github.com/argoproj/argo-cd/releases/download/v2.0.4/argocd-linux-amd64
+
+sudo chmod +x /usr/local/bin/argocd`
+
+### Expose argocd-server
+
+A Load Balancer will be used to make it usable ArgoCD:
+`kubectl patch svc argocd-server -n argocd -p '{"spec": {"type": "LoadBalancer"}}'
+
+export ARGOCD_SERVER=`kubectl get svc argocd-server -n argocd -o json | jq --raw-output '.status.loadBalancer.ingress[0].hostname'`
+`
+### Login and User Details for Web-UI
+
+User details is taken and login with argocd cli if it needs. I wanted to use ArgoCD WebUI.
+
+`export ARGO_PWD=`kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d`
+argocd login $ARGOCD_SERVER --username admin --password $ARGO_PWD --insecure`
+
